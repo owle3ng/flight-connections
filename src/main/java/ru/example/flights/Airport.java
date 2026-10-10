@@ -32,13 +32,4 @@ public final class Airport implements Identifiable {
     public ZoneId getZoneId() {
         return zoneId;
     }
-
-    /** 2 Аэропорта равны, если совпадают их IATA */
-    @Override public boolean equals(Object other) {
-        return this == other || other instanceof Airport airport && iataCode.equals(airport.iataCode);
-    }
-
-    @Override public String toString() {
-        return iataCode + " — " + name;
-    }
 }
