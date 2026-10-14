@@ -26,6 +26,15 @@ public final class Flight implements Identifiable {
     @Override public String getId() {
         return flightNumber;
     }
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+    public Airport getDepartureAirport() {
+        return departureAirport;
+    }
+    public Airport getArrivalAirport() {
+        return arrivalAirport;
+    }
     // В Instant gj UTC
     public Instant getDepartureInstant() {
         return localDeparture.atZone(departureAirport.getZoneId()).toInstant();
