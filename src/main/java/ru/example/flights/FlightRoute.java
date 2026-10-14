@@ -28,3 +28,30 @@ public final class FlightRoute {
             Duration connection = Duration.between(previous.getArrivalInstant(), next.getDepartureInstant());
         }
     }
+    public List<FlightSegment> getSegments() {
+        return segments;
+    }
+
+    public Duration getMinimumConnectionTime() {
+        return minimumConnectionTime;
+    }
+
+    public Duration getTotalFlightDuration() {
+        return segments.stream().map(s -> s.flight().getDuration()).reduce(Duration.ZERO, Duration::plus);
+    }
+
+    public Duration getTotalConnectionDuration() {
+        Duration total = Duration.ZERO;
+        for (int i = 1; i < segments.size(); i++) {
+            Flight previous = segments.get(i - 1).flight();
+            Flight next = segments.get(i).flight();
+            total = total.plus(Duration.between(previous.getArrivalInstant(), next.getDepartureInstant()));
+        }
+        return total;
+    }
+
+    public Duration getTotalTravelDuration() {
+        Flight first = segments.getFirst().flight();
+        Flight last = segments.getLast().flight();
+        return Duration.between(first.getDepartureInstant(), last.getArrivalInstant());
+    }
