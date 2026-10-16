@@ -45,4 +45,16 @@ public final class Flight implements Identifiable {
     public Duration getDuration() {
         return Duration.between(getDepartureInstant(), getArrivalInstant());
     }
+    public String describe() {
+        String dateMark = localDeparture.toLocalDate().equals(localArrival.toLocalDate()) ? "" : " (смена даты)";
+        return "%s: %s %s → %s %s%s, длительность %s".formatted(flightNumber, departureAirport.getIataCode(), localDeparture, arrivalAirport.getIataCode(), localArrival, dateMark, formatDuration(getDuration()));
+    }
+
+    static String formatDuration(Duration duration) {
+        long hours = duration.toHours();
+        long minutes = duration.toMinutesPart();
+        return hours + " ч " + minutes + " мин";
+    }
+
+    @Override public String toString() { return describe(); }
 }

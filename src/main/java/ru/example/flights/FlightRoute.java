@@ -18,16 +18,22 @@ public final class FlightRoute {
         this.segments = List.copyOf(segments);
         validateConnections();
     }
+
     private void validateConnections() {
         for (int i = 1; i < segments.size(); i++) {
             Flight previous = segments.get(i - 1).flight();
             Flight next = segments.get(i).flight();
             if (!previous.getArrivalAirport().equals(next.getDepartureAirport())) {
-                throw new ConnectionException("Аэропорт стыковки неверный" + previous.getFlightNumber()+ "и "+ next.getFlightNumber());
+                throw new IllegalArgumentException("Аэропорты не совпадают");
             }
             Duration connection = Duration.between(previous.getArrivalInstant(), next.getDepartureInstant());
+
+            if (connection.isNegative()) {
+                throw new ConnectionException("Слишком короткая пересадка между рейсами " + previous.getFlightNumber() + " и " + next.getFlightNumber());
+            }
         }
     }
+
     public List<FlightSegment> getSegments() {
         return segments;
     }
