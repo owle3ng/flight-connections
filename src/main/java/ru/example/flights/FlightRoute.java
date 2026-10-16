@@ -61,3 +61,21 @@ public final class FlightRoute {
         Flight last = segments.getLast().flight();
         return Duration.between(first.getDepartureInstant(), last.getArrivalInstant());
     }
+    public String printRoute() {
+        StringBuilder result = new StringBuilder("Маршрут:\n");
+        for (int i = 0; i < segments.size(); i++) {
+            result.append(i + 1).append(". ").append(segments.get(i).flight().describe()).append('\n');
+            if (i + 1 < segments.size()) {
+                Flight current = segments.get(i).flight();
+                Flight next = segments.get(i + 1).flight();
+                Duration wait = Duration.between(current.getArrivalInstant(), next.getDepartureInstant());
+                result.append("   Пересадка в ").append(current.getArrivalAirport().getIataCode())
+                        .append(": ").append(Flight.formatDuration(wait)).append('\n');
+            }
+        }
+        result.append("Время в самолёте: ").append(Flight.formatDuration(getTotalFlightDuration())).append('\n');
+        result.append("Время на пересадки: ").append(Flight.formatDuration(getTotalConnectionDuration())).append('\n');
+        result.append("Полное время в пути: ").append(Flight.formatDuration(getTotalTravelDuration()));
+        return result.toString();
+    }
+}
