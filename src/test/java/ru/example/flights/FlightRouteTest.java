@@ -38,4 +38,8 @@ class FlightRouteTest {
     @Test void arrivalInstantMustBeAfterDeparture() {
         assertThrows(IllegalArgumentException.class, () -> new Flight("BAD", ams, fra, LocalDateTime.of(2026, 11, 10, 10, 0), LocalDateTime.of(2026, 11, 10, 8, 0)));
     }
+    @Test void emptyRouteIsRejected() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new FlightRoute(List.of(), Duration.ofMinutes(30)));
+    }
 }
