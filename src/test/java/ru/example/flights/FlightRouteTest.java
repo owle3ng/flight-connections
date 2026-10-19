@@ -42,4 +42,10 @@ class FlightRouteTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new FlightRoute(List.of(), Duration.ofMinutes(30)));
     }
+    @Test void negativeMinimumConnectionIsRejected() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new FlightRoute(List.of(new FlightSegment(
+                        flight("A6", ams, fra, 10, 8, 10, 9))), Duration.ofMinutes(-1)));
+    }
+
 }
