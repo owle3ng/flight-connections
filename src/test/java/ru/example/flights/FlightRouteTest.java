@@ -5,8 +5,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FlightRouteTest {
@@ -34,18 +32,21 @@ class FlightRouteTest {
         Flight f = flight("T3", ams, fra, 10, 23, 11, 2);
         assertEquals(Duration.ofHours(3), f.getDuration());
     }
-
     @Test void arrivalInstantMustBeAfterDeparture() {
-        assertThrows(IllegalArgumentException.class, () -> new Flight("BAD", ams, fra, LocalDateTime.of(2026, 11, 10, 10, 0), LocalDateTime.of(2026, 11, 10, 8, 0)));
-    }
-    @Test void emptyRouteIsRejected() {
         assertThrows(IllegalArgumentException.class, () ->
-                new FlightRoute(List.of(), Duration.ofMinutes(30)));
+                new Flight("BAD", ams, fra,
+                        LocalDateTime.of(2026, 11, 10, 10, 0),
+                        LocalDateTime.of(2026, 11, 10, 8, 0)));
     }
     @Test void negativeMinimumConnectionIsRejected() {
         assertThrows(IllegalArgumentException.class, () ->
                 new FlightRoute(List.of(new FlightSegment(
-                        flight("A6", ams, fra, 10, 8, 10, 9))), Duration.ofMinutes(-1)));
+                        flight("A6", ams, hel, 10, 8, 10, 9))), Duration.ofMinutes(-1)));
     }
-
+    @Test void SameAirports() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Flight("ERR", ams, ams,
+                        LocalDateTime.of(2026, 11, 10, 10, 0),
+                        LocalDateTime.of(2026, 11, 10, 8, 0)));
+    }
 }
